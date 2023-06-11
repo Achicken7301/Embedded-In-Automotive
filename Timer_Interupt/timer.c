@@ -1,5 +1,0 @@
-void delay(int duration){
-	
-}
-
-
