@@ -1,34 +1,31 @@
-#include "stm32f10x.h"
+#include "main.h"
 
-void config()
+void TIM2_IRQHandler()
 {
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
-	GPIO_InitTypeDef gpio;
+	/* Checks whether the TIM2 interrupt has occurred or not*/
+	if (TIM_GetITStatus(TIM2, TIM_IT_Update))
+	{
+		timerRun();
 
-	gpio.GPIO_Mode = GPIO_Mode_Out_PP;
-	gpio.GPIO_Pin = GPIO_Pin_13;
-	gpio.GPIO_Speed = GPIO_Speed_2MHz;
-
-	GPIO_Init(GPIOC, &gpio);
-}
-
-void delay()
-{
-	uint32_t i;
-	for (i = 0; i < 1000000; i++)
-		;
+		/*Clears the TIM2 interrupt pending bit*/
+		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
+	}
 }
 
 int main(void)
 {
-	config();
+	pinConfig(DIO_CHANNEL_PC13, GPIO_Mode_Out_PP);
+	pinConfig(DIO_CHANNEL_PB12, GPIO_Mode_Out_PP);
+	setTimer(1000);
+	TIM2_INT_Init();
 
 	while (1)
 	{
-		// GPIO_ResetBits(GPIOC, GPIO_Pin_13);
-		GPIO_SetBits(GPIOC, GPIO_Pin_13);
-		delay();
-		GPIO_ResetBits(GPIOC, GPIO_Pin_13);
-		delay();
+		if (timer_flag == 1)
+		{
+			setTimer(1000);
+			GPIOC->ODR ^= GPIO_Pin_13;
+			GPIOB->ODR ^= GPIO_Pin_12;
+		}
 	}
 }
