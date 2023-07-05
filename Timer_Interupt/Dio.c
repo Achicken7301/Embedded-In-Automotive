@@ -1,6 +1,52 @@
 #include "Dio.h"
 #include "stm32f10x.h"
 
+void enablePortClock(GPIO_InitTypeDef *gpio, Dio_Port *port){
+	switch (*port)
+  {
+  	case Dio_PortA:
+			// enable clock for portA
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+			GPIO_Init(GPIOA, gpio);
+  		break;
+  	case Dio_PortB:
+			// enable clock for portB
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+			GPIO_Init(GPIOB, gpio);
+  		break;
+  	case Dio_PortC:
+			// enable clock for portC
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+			GPIO_Init(GPIOC, gpio);
+  		break;
+  	default:
+  		break;
+  }
+}
+
+void pinSelect(GPIO_InitTypeDef *gpio, Dio_Pin *pin){
+	
+}
+
+void pinMode(Dio_Port port, Dio_Pin pin, GPIOMode_TypeDef type){
+	GPIO_InitTypeDef gpio;
+	gpio.GPIO_Mode = type;
+	gpio.GPIO_Speed = GPIO_Speed_2MHz;
+	
+	// each type set clock and seperate port and pin
+	switch (type)
+	{
+		case GPIO_Mode_IPU:
+			
+			break;
+		case GPIO_Mode_Out_PP:
+			pinSelect(&gpio, &pin);
+			enablePortClock(&gpio, &port);
+			break;
+		default:
+			break;
+	}
+}
 
 /**
  * @brief config DIO mode (INPUT - OUPUT - PULLUP - PULLDOWN)
@@ -216,7 +262,6 @@ void pinConfig(Dio_channel_type channelid, GPIOMode_TypeDef type)
 	GPIO_Init(GPIOB, &gpio);
 	GPIO_Init(GPIOC, &gpio);
 }
-
 
 
 void Dio_WriteChannel(Dio_channel_type ChannelId, Dio_LevelType Level)

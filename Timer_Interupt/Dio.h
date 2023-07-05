@@ -58,6 +58,33 @@ typedef enum
 	DIO_CHANNEL_PC15
 } Dio_channel_type;
 
+
+typedef enum{
+	Dio_PortA,
+	Dio_PortB,
+	Dio_PortC
+}Dio_Port;
+
+typedef enum{
+	Dio_Pin_0,
+	Dio_Pin_1,
+	Dio_Pin_2,
+	Dio_Pin_3,
+	Dio_Pin_4,
+	Dio_Pin_5,
+	Dio_Pin_6,
+	Dio_Pin_7,
+	Dio_Pin_8,
+	Dio_Pin_9,
+	Dio_Pin_10,
+	Dio_Pin_11,
+	Dio_Pin_12,
+	Dio_Pin_13,
+	Dio_Pin_14,
+	Dio_Pin_15
+}Dio_Pin;
+
+
 /**
  * @brief Level HIGH or LOW
  * 

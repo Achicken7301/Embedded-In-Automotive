@@ -79,5 +79,19 @@ là giá trị của chân vi điều khiển bị thay đổi. Có 4 chế đ�
 
 
 
-## SPI protocol
+## Software SPI
 
+## Hardware SPI
+
+## Software I2C
+
+## Hardware I2C
+
+# UART
+Những thông tin cần lưu ý, tốc độ baudrate, bit chẳn lẽ. 
+
+## BAUDRATE
+là trong 1s truyền được bao nhiêu bit, từ đó tính được timer sử dụng để ngắt truyền data.
+
+
+## bit chẳn lẽ 

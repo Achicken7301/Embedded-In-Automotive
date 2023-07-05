@@ -13,7 +13,6 @@ void TIM2_IRQHandler()
 	}
 }
 
-
 int main(void)
 {
 	// setup timer2
