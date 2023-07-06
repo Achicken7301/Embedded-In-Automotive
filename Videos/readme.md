@@ -5,6 +5,7 @@
 https://drive.google.com/file/d/1Mz22RwSQegpQNNTvR8s9GQlrfhnr0Hib/view?usp=sharing
 
 ## Software I2C
+https://youtu.be/vmzbHbGjcnw
 
 ## Software SPI
 https://youtu.be/pV367kg5OkU

@@ -53,7 +53,7 @@ static uint8_t readACK(SoftI2c_InitPin *i2c_pin)
 	// Read ACK
 	ACK = Dio_ReadChannel(i2c_pin->SDA.port, i2c_pin->SDA.pin_number);
 	DelayUs(Thalf);
-	
+
 	Dio_WriteChannel(i2c_pin->SCL.port, i2c_pin->SCL.pin_number, STD_LOW);
 	pinMode(i2c_pin->SDA.port, i2c_pin->SDA.pin_number, GPIO_Mode_Out_PP);
 	DelayUs(Thalf);
@@ -81,10 +81,10 @@ void writeI2C(SoftI2c_InitPin *i2c_pin, uint8_t slave_address, uint8_t data)
 	writeByte(i2c_pin, (slave_address << 1));
 
 	// read ACK
-	//pinMode(i2c_pin->SDA.port, i2c_pin->SDA.pin_number, GPIO_Mode_IPD);
-	
+	// pinMode(i2c_pin->SDA.port, i2c_pin->SDA.pin_number, GPIO_Mode_IPD);
+
 	ACK = readACK(i2c_pin);
-	//pinMode(i2c_pin->SDA.port, i2c_pin->SDA.pin_number, GPIO_Mode_Out_PP);
+	// pinMode(i2c_pin->SDA.port, i2c_pin->SDA.pin_number, GPIO_Mode_Out_PP);
 	if (ACK == 0) // repeated start
 	{
 		Dio_WriteChannel(Dio_PortB, Dio_Pin_12, STD_LOW);
@@ -97,8 +97,7 @@ void writeI2C(SoftI2c_InitPin *i2c_pin, uint8_t slave_address, uint8_t data)
 		endI2C(i2c_pin);
 		Dio_WriteChannel(Dio_PortB, Dio_Pin_12, STD_HIGH);
 	}
-	
-	
+
 	// ideal state, SCK, SDA - HIGH
 	Dio_WriteChannel(i2c_pin->SCL.port, i2c_pin->SCL.pin_number, STD_HIGH);
 	Dio_WriteChannel(i2c_pin->SDA.port, i2c_pin->SDA.pin_number, STD_HIGH);
