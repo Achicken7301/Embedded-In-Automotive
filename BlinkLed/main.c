@@ -23,9 +23,8 @@ int main(void)
 	{
 		if (timer_flag == 1)
 		{
-			setTimer(1000);
+			setTimer(500);
 			GPIOC->ODR ^= GPIO_Pin_13;
-			GPIOB->ODR ^= GPIO_Pin_12;
 		}
 	}
 }

@@ -23,6 +23,11 @@ void spiInit(SoftSPI_InitPin *SPI_pin)
 	Dio_WriteChannel(SPI_pin->SS.port, SPI_pin->SS.pin_number, STD_HIGH);
 }
 
+/**
+ * @brief Start SPI transmit by set SS pin to LOW
+ * 
+ * @param SPI_pin 
+ */
 void SPI_Start(SoftSPI_InitPin *SPI_pin)
 {
 	Dio_WriteChannel(SPI_pin->SS.port, SPI_pin->SS.pin_number, STD_LOW);
@@ -40,7 +45,7 @@ void SPI_End(SoftSPI_InitPin *SPI_pin)
 }
 
 /**
- * @brief Master sends data to slave
+ * @brief Master sends data & receive data from slave
  *
  * @param byte_out
  * @return uint8_t
@@ -61,7 +66,7 @@ uint8_t SPI_transfer(SoftSPI_InitPin *pin, uint8_t byte_out)
 		DelayUs(THalf);
 		Dio_WriteChannel(pin->SCK.port, pin->SCK.pin_number, STD_HIGH);
 
-		// Read data from MISO, bit order LSB
+		// Read data from MISO, bit order MSB
 		if (Dio_ReadChannel(pin->MISO.port, pin->MISO.pin_number))
 		{
 			byte_in |= ibit;

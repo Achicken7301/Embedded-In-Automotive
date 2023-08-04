@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\blinkled.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\blinkled.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Thu Jul  6 09:09:50 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Mon Jul 10 14:53:34 2023
 <BR><P>
 <H3>Maximum Stack Usage =         96 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -627,7 +627,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writeI2C
 </UL>
 
-<P><STRONG><a name="[37]"></a>writeI2C</STRONG> (Thumb, 236 bytes, Stack size 16 bytes, software_i2c.o(.text.writeI2C))
+<P><STRONG><a name="[37]"></a>writeI2C</STRONG> (Thumb, 242 bytes, Stack size 16 bytes, software_i2c.o(.text.writeI2C))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = writeI2C &rArr; readACK &rArr; pinMode &rArr; enablePortClock &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writeByte
@@ -650,7 +650,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pinMode
 </UL>
 
-<P><STRONG><a name="[5e]"></a>readACK</STRONG> (Thumb, 92 bytes, Stack size 16 bytes, software_i2c.o(.text.readACK))
+<P><STRONG><a name="[5e]"></a>readACK</STRONG> (Thumb, 86 bytes, Stack size 16 bytes, software_i2c.o(.text.readACK))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = readACK &rArr; pinMode &rArr; enablePortClock &rArr; GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayUs

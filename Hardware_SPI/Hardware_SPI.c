@@ -12,7 +12,7 @@ void SPIx_Init()
 	
 	
 	RCC->CFGR |= RCC_CFGR_PPRE2_DIV16; // Divine APB2 / 16
-	SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256; // 72 / 256 = 0.28125MHz
+	SPI_InitStruct.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256; // APB2 / 16 / 256 = 0.28125MHz
 	
 	SPI_InitStruct.SPI_CPHA = SPI_CPHA_1Edge;
 	SPI_InitStruct.SPI_CPOL = SPI_CPOL_Low;
