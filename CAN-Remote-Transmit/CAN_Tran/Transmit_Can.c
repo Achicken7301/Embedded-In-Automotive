@@ -3,26 +3,27 @@
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_gpio.h"
 
-void init_can()
-{
-    GPIO_InitTypeDef GPIO_InitStructure;
-    CAN_InitTypeDef CAN_InitStructure;
-    CAN_FilterInitTypeDef CAN_FilterInitStructure;
+void init_can(){
+    GPIO_InitTypeDef            GPIO_InitStructure;
+    CAN_InitTypeDef             CAN_InitStructure;
+    CAN_FilterInitTypeDef       CAN_FilterInitStructure;
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+   
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1, ENABLE);
+	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+	
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-    /* CAN cell init */
+	
+	/* CAN cell init */
     CAN_InitStructure.CAN_TTCM = DISABLE;
     CAN_InitStructure.CAN_ABOM = DISABLE;
     CAN_InitStructure.CAN_AWUM = DISABLE;
@@ -30,7 +31,7 @@ void init_can()
     CAN_InitStructure.CAN_RFLM = DISABLE;
     CAN_InitStructure.CAN_TXFP = DISABLE;
     CAN_InitStructure.CAN_Mode = CAN_Mode_Normal;
-
+  
     /* CAN Baudrate = 1MBps*/
     CAN_InitStructure.CAN_SJW = CAN_SJW_1tq;
     CAN_InitStructure.CAN_BS1 = CAN_BS1_3tq;
@@ -50,8 +51,7 @@ void init_can()
     CAN_FilterInit(&CAN_FilterInitStructure);
 }
 
-void send_Can_message(uint32_t id, uint8_t *data, uint8_t len)
-{
+void send_Can_message(uint32_t id, uint8_t *data, uint8_t len){
     CanTxMsg TxMessage;
 
     TxMessage.StdId = id;
@@ -66,16 +66,18 @@ void send_Can_message(uint32_t id, uint8_t *data, uint8_t len)
     }
 
     CAN_Transmit(CAN1, &TxMessage);
+    
 }
 
-int main()
-{
+
+int main(){
     init_can();
-    uint8_t data[8] = {1, 4, 2, 5, 6, 3, 5, 3};
-    uint8_t data1[8] = {'K', 'h', 'a', 'n', 'g', '1', '2', '3'};
+    uint8_t data[8]= {1, 4, 2, 5, 6, 3, 5, 3};
+	uint8_t data1[8] = {'K','h','a','n','g','1','2','3'};
     while (1)
     {
-        // send_Can_message(0x123, data, 8);
+        //send_Can_message(0x123, data, 8);
         send_Can_message(0x123, data1, 8);
     }
+    
 }

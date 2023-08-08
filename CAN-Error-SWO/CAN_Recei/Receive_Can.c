@@ -2,8 +2,9 @@
 #include "stm32f10x_can.h"
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_gpio.h"
+#include "delay.h"
 
-void init_can()
+void init_CAN(uint16_t can_id)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
     CAN_InitTypeDef CAN_InitStructure;
@@ -11,7 +12,6 @@ void init_can()
 
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1, ENABLE);
-
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -41,41 +41,55 @@ void init_can()
     CAN_FilterInitStructure.CAN_FilterNumber = 0;
     CAN_FilterInitStructure.CAN_FilterMode = CAN_FilterMode_IdMask;
     CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit;
-    CAN_FilterInitStructure.CAN_FilterIdHigh = 0x0000;
+    CAN_FilterInitStructure.CAN_FilterIdHigh = (can_id << 5);
     CAN_FilterInitStructure.CAN_FilterIdLow = 0x0000;
-    CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0x0000;
+    CAN_FilterInitStructure.CAN_FilterMaskIdHigh = 0xFFFF;
     CAN_FilterInitStructure.CAN_FilterMaskIdLow = 0x0000;
     CAN_FilterInitStructure.CAN_FilterFIFOAssignment = CAN_FIFO0;
     CAN_FilterInitStructure.CAN_FilterActivation = ENABLE;
     CAN_FilterInit(&CAN_FilterInitStructure);
 }
 
-void send_Can_message(uint32_t id, uint8_t *data, uint8_t len)
+static uint8_t TestArray[8];
+
+void receive_Can_message()
 {
-    CanTxMsg TxMessage;
 
-    TxMessage.StdId = id;
-    TxMessage.ExtId = 0x00;
-    TxMessage.RTR = CAN_RTR_DATA;
-    TxMessage.IDE = CAN_ID_STD;
-    TxMessage.DLC = len;
+    CanRxMsg RxMessage;
+    while (CAN_MessagePending(CAN1, CAN_FIFO0) < 1)
+        ;
+    CAN_Receive(CAN1, CAN_FIFO0, &RxMessage);
 
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < RxMessage.DLC; i++)
     {
-        TxMessage.Data[i] = data[i];
+        TestArray[i] = RxMessage.Data[i];
     }
+}
 
-    CAN_Transmit(CAN1, &TxMessage);
+void receiveSpeedData()
+{
+	
 }
 
 int main()
 {
-    init_can();
-    uint8_t data[8] = {1, 4, 2, 5, 6, 3, 5, 3};
-    uint8_t data1[8] = {'K', 'h', 'a', 'n', 'g', '1', '2', '3'};
+    init_CAN(0x123);
+    DelayInit();
+    GPIO_InitTypeDef GPIO_InitStructure;
+
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOC, &GPIO_InitStructure);
+
     while (1)
     {
-        // send_Can_message(0x123, data, 8);
-        send_Can_message(0x123, data1, 8);
+        receive_Can_message();
+        if (TestArray[0] == 'K' && TestArray[1] == 'h' && TestArray[2] == 'a' && TestArray[3] == 'n' && TestArray[4] == 'g')
+        {
+            GPIOC->ODR ^= GPIO_Pin_13;
+            DelayMs(1000);
+        }
     }
 }

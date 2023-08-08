@@ -50,32 +50,28 @@ void init_can()
     CAN_FilterInit(&CAN_FilterInitStructure);
 }
 
-void send_Can_message(uint32_t id, uint8_t *data, uint8_t len)
+void sendSpeedData(uint16_t speedData)
 {
     CanTxMsg TxMessage;
-
-    TxMessage.StdId = id;
-    TxMessage.ExtId = 0x00;
-    TxMessage.RTR = CAN_RTR_DATA;
+    TxMessage.StdId = 0x123;
     TxMessage.IDE = CAN_ID_STD;
-    TxMessage.DLC = len;
+    TxMessage.DLC = 2;
 
-    for (int i = 0; i < len; i++)
+    TxMessage.Data[0] = (uint8_t)(speedData & 0xFF);
+    TxMessage.Data[1] = (uint8_t)((speedData >> 8) & 0xFF);
+
+    if (CAN_Transmit(CAN1, &TxMessage) != CAN_TxStatus_Ok)
     {
-        TxMessage.Data[i] = data[i];
+		// Send logError
     }
-
-    CAN_Transmit(CAN1, &TxMessage);
 }
 
 int main()
 {
     init_can();
-    uint8_t data[8] = {1, 4, 2, 5, 6, 3, 5, 3};
-    uint8_t data1[8] = {'K', 'h', 'a', 'n', 'g', '1', '2', '3'};
+	
+	
     while (1)
     {
-        // send_Can_message(0x123, data, 8);
-        send_Can_message(0x123, data1, 8);
     }
 }
