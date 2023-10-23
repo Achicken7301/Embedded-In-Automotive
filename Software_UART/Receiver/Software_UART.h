@@ -4,7 +4,7 @@
 #include "Dio.h"
 #include "delay.h"
 
-#define Tfull 100*1000
+#define Tfull 115200
 #define Thalf Tfull/2
 
 typedef struct
